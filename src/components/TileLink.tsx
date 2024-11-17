@@ -14,7 +14,7 @@ export const TileLink = ({
   return (
     <Link
       href={href || "#"}
-      className={`border-2 inline-flex p-8 rounded-lg hover:bg-slate-900 ${
+      className={`border-2 inline-flex items-center p-8 rounded-lg hover:bg-slate-900 ${
         !href && "pointer-events-none"
       } ${className}`}
     >

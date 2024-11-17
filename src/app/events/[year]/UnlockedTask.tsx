@@ -8,7 +8,11 @@ interface Props {
 
 export const UnlockedTask = ({ task, year }: Props) => {
   return (
-    <TileLink key={task.id} href={`/events/${year}/${task.id}`}>
+    <TileLink
+      key={task.id}
+      className={task.done ? "bg-green-800" : ""}
+      href={`/events/${year}/${task.id}`}
+    >
       #{task.id} {task.title}
     </TileLink>
   );
