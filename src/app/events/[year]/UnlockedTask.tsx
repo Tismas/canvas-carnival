@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { TileLink } from "@/components/TileLink";
 import { UnlockedTask as Task } from "@/data/tasks";
 
@@ -6,7 +7,9 @@ interface Props {
   year: string;
 }
 
-export const UnlockedTask = ({ task, year }: Props) => {
+export const UnlockedTask = async ({ task, year }: Props) => {
+  const session = await auth();
+
   return (
     <TileLink
       key={task.id}

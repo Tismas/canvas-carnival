@@ -11,6 +11,7 @@
 1. Zrób edytor prosty edytor mapy (klikniecie na dany tile go koloruje lub czysci)
 1. Zrób kolorowe robaczki rozchodzące się w losowe strony ze środka ekranu
 1. Zrób symulator star fielda
+1. Spraw by piłka z zadania drugiego się zgniatała przy uderzeniach w ścianę
 1. Narysuj bezier curve z 10 controll pointami
 1. Narysuj fractala (tbd jakiego - latwy, trojkat sierpinskiego?)
 1. Narysuj nieskończonego bezier curve'a - control pointy się poruszają, t jest zapętlone 0->1->0->1...

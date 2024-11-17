@@ -3,10 +3,11 @@ import { PropsWithChildren } from "react";
 import {
   IconCalendarEvent,
   IconConfetti,
-  IconDoorEnter,
   IconHeart,
   IconUser,
 } from "@tabler/icons-react";
+import { auth } from "@/auth";
+import { AuthButton } from "./(auth)/AuthButton";
 
 interface NavLinkProps {
   href: string;
@@ -14,7 +15,7 @@ interface NavLinkProps {
 const NavLink = ({ href, children }: PropsWithChildren<NavLinkProps>) => {
   return (
     <Link
-      className="px-6 py-3 font-bold rounded-lg inline-flex gap-2 text-primary hover:bg-slate-900"
+      className="px-6 py-3 font-bold rounded-lg inline-flex gap-2 text-primary-500 hover:bg-slate-900"
       href={href}
     >
       {children}
@@ -22,10 +23,12 @@ const NavLink = ({ href, children }: PropsWithChildren<NavLinkProps>) => {
   );
 };
 
-export const Nav = () => {
+export const Nav = async () => {
+  const session = await auth();
+
   return (
     <div className="m-4 flex items-center">
-      <Link className="inline-flex text-primary mr-4" href={"/"}>
+      <Link className="inline-flex text-primary-500 mr-4" href={"/"}>
         <IconConfetti size={40} />
       </Link>
       <NavLink href={"/events"}>
@@ -37,9 +40,7 @@ export const Nav = () => {
       <NavLink href={"/profile"}>
         <IconUser /> Profile
       </NavLink>
-      <NavLink href={"/login"}>
-        <IconDoorEnter /> Log in
-      </NavLink>
+      <AuthButton className="px-6 py-3 font-bold rounded-lg inline-flex gap-2 text-primary-500 hover:bg-slate-900" />
     </div>
   );
 };

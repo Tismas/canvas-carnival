@@ -5,7 +5,6 @@ export interface UnlockedTask {
   title: string;
   description: string;
   hints: string[];
-  done: boolean;
   // exampleSolution: string;
   isUnlocked: true;
 }
@@ -27,7 +26,6 @@ export const tasks: Array<Task> = [
       "Math.random() returns random value between 0 and 1.",
       "You can multiply this random value to get a different range. Eg. Math.random() * canvas.width will get you random value between 0 and canvas.width",
     ],
-    done: true,
     isUnlocked: true,
   },
   {
@@ -41,7 +39,6 @@ export const tasks: Array<Task> = [
       "You can add that velocity to the ball position to make the ball move and invert given velocity when ball touches the edge of the screen eg. if ball.position.x < 0 then ball.velocity.x = -ball.velocity.x",
       "You can use setInterval to keep drawing and updating canvas eg. 60 times a second - setInterval(aFunction, 1000/ 60)",
     ],
-    done: false,
     isUnlocked: true,
   },
   {
@@ -55,3 +52,9 @@ export const tasks: Array<Task> = [
     unlockedAt: addDays(new Date(), 2),
   },
 ];
+
+export const getTaskById = (id: number): Task => {
+  const task = tasks.find((t) => t.id === id);
+  if (!task) throw new Error(`Task with ${id} not found`);
+  return task;
+};
