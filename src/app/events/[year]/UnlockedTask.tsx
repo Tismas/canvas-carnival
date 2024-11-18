@@ -1,6 +1,9 @@
 import { auth } from "@/auth";
 import { TileLink } from "@/components/TileLink";
 import { UnlockedTaskData } from "@/data/events";
+import { isTaskDone } from "@/db/helpers";
+import { useUser } from "@/hooks/useUser";
+import { redirect } from "next/navigation";
 
 interface Props {
   taskData: UnlockedTaskData;
@@ -8,12 +11,9 @@ interface Props {
 }
 
 export const UnlockedTask = async ({ taskData, year }: Props) => {
-  const session = await auth();
-
   const { task, taskNumber } = taskData;
-  const isDone = false;
-
-  console.log(session);
+  const user = await useUser();
+  const isDone = await isTaskDone(user, year, taskNumber);
 
   return (
     <TileLink

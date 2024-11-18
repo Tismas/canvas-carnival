@@ -1,6 +1,11 @@
+import { auth } from "@/auth";
+import { Button } from "@/components/Button";
 import { Hint } from "@/components/Hint";
 import { getTask, isValidEventYear, isValidTaskNumber } from "@/data/events";
+import { isTaskDone } from "@/db/helpers";
+import { useUser } from "@/hooks/useUser";
 import { notFound } from "next/navigation";
+import { DoneButton } from "./DoneButton";
 
 interface Props {
   params: Promise<{ year: string; task: string }>;
@@ -13,6 +18,9 @@ export default async function Event({ params }: Props) {
 
   const taskData = getTask(year, taskNumber);
   if (!taskData || !taskData.isUnlocked) return notFound();
+  const user = await useUser();
+
+  const isDone = await isTaskDone(user, year, taskNumber);
 
   const { task } = taskData;
 
@@ -27,6 +35,12 @@ export default async function Event({ params }: Props) {
           {hint}
         </Hint>
       ))}
+      <DoneButton
+        isDone={isDone}
+        userEmail={user.email}
+        year={year}
+        taskNumber={taskNumber}
+      />
     </div>
   );
 }
