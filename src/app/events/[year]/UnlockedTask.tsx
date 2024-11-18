@@ -1,22 +1,26 @@
 import { auth } from "@/auth";
 import { TileLink } from "@/components/TileLink";
-import { UnlockedTask as Task } from "@/data/tasks";
+import { UnlockedTaskData } from "@/data/events";
 
 interface Props {
-  task: Task;
+  taskData: UnlockedTaskData;
   year: string;
 }
 
-export const UnlockedTask = async ({ task, year }: Props) => {
+export const UnlockedTask = async ({ taskData, year }: Props) => {
   const session = await auth();
+
+  const { task, taskNumber } = taskData;
+  const isDone = false;
+
+  console.log(session);
 
   return (
     <TileLink
-      key={task.id}
-      className={task.done ? "bg-green-800" : ""}
-      href={`/events/${year}/${task.id}`}
+      className={isDone ? "bg-green-800" : ""}
+      href={`/events/${year}/${taskNumber}`}
     >
-      #{task.id} {task.title}
+      #{taskNumber} {task.title}
     </TileLink>
   );
 };

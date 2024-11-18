@@ -1,25 +1,25 @@
 import { Hint } from "@/components/Hint";
-import { Task, tasks } from "@/data/tasks";
+import { getTask, isValidEventYear, isValidTaskNumber } from "@/data/events";
 import { notFound } from "next/navigation";
-
-const getTask = async (id: string): Promise<Task | undefined> => {
-  return tasks.find((t) => t.id === Number(id));
-};
 
 interface Props {
   params: Promise<{ year: string; task: string }>;
 }
 
 export default async function Event({ params }: Props) {
-  const { task: taskId } = await params;
-  const task = await getTask(taskId);
+  const { task: taskNumber, year } = await params;
+  if (!isValidEventYear(year)) notFound();
+  if (!isValidTaskNumber(year, taskNumber)) notFound();
 
-  if (!task || !task.isUnlocked) return notFound();
+  const taskData = getTask(year, taskNumber);
+  if (!taskData || !taskData.isUnlocked) return notFound();
+
+  const { task } = taskData;
 
   return (
     <div className="flex flex-col gap-2">
       <div>
-        #{task.id} -- {task.title}
+        #{taskNumber} -- {task.title}
       </div>
       <div className="text-gray-300">{task.description}</div>
       {task.hints.map((hint, i) => (

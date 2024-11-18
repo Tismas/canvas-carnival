@@ -1,37 +1,18 @@
 "use client";
 
 import { TileLink } from "@/components/TileLink";
+import type { LockedTaskData } from "@/data/events";
+import { getTimeRemaining } from "@/helpers/getTimeRemaining";
 import { IconLock } from "@tabler/icons-react";
-import { DurationUnit, formatDuration, intervalToDuration } from "date-fns";
-import { LockedTask as Task } from "@/data/tasks";
 import { useEffect, useState } from "react";
 
 interface Props {
-  task: Task;
+  taskData: LockedTaskData;
 }
 
-const getTimeUntilUnlocked = (unlockedAt: Date) => {
-  const duration = intervalToDuration({ start: new Date(), end: unlockedAt });
-  const units: DurationUnit[] = [
-    "years",
-    "months",
-    "weeks",
-    "days",
-    "hours",
-    "minutes",
-    "seconds",
-  ];
-  const nonzero = Object.entries(duration)
-    .filter(([_, value]) => value)
-    .map(([unit, _]) => unit);
-  const format = units.filter((i) => new Set(nonzero).has(i)).slice(0, 2);
-
-  return formatDuration(duration, { format });
-};
-
-export const LockedTask = ({ task }: Props) => {
+export const LockedTask = ({ taskData }: Props) => {
   const [timeUntilUnlocked, setTimeUntilUnlocked] = useState(
-    getTimeUntilUnlocked(task.unlockedAt)
+    getTimeRemaining(taskData.unlockedAt)
   );
 
   useEffect(() => {
@@ -39,14 +20,14 @@ export const LockedTask = ({ task }: Props) => {
       ? 500
       : 30000;
     const intervalId = setInterval(() => {
-      setTimeUntilUnlocked(getTimeUntilUnlocked(task.unlockedAt));
+      setTimeUntilUnlocked(getTimeRemaining(taskData.unlockedAt));
     }, intervalDuration);
 
     return () => clearInterval(intervalId);
-  }, [task.unlockedAt]);
+  }, [taskData.unlockedAt]);
 
   return (
-    <TileLink className="flex flex-col items-center" key={task.id}>
+    <TileLink className="flex flex-col items-center">
       <IconLock />
       <span>Unlocks in {timeUntilUnlocked}</span>
     </TileLink>
