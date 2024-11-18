@@ -1,5 +1,3 @@
-"use client";
-
 import { AuthForm } from "../AuthForm";
 import { RegisterHeader } from "./RegisterHeader";
 import { RegisterForm } from "./RegisterForm";

@@ -18,7 +18,7 @@ export const AuthForm = ({ header, form, buttons }: Props) => {
   }, [status]);
 
   return (
-    <div className="flex justify-center mt-32">
+    <div className="flex justify-center mt-16">
       <div className="border-slate-900 border-4 rounded-lg p-8 w-full max-w-md">
         <div className="mb-8 text-center">{header}</div>
         {form}

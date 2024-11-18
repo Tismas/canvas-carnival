@@ -1,5 +1,3 @@
-"use client";
-
 import { AuthForm } from "../AuthForm";
 import { LoginHeader } from "./LoginHeader";
 import { LoginForm } from "./LoginForm";
