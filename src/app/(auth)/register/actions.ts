@@ -23,12 +23,12 @@ export const createAccount = async (
     const password = await bcrypt.hash(values.password, 10);
     const name = values.name;
 
-    const existingUser = await db
+    const [user] = await db
       .select({ email: users.email })
       .from(users)
       .where(eq(users.email, email))
       .limit(1);
-    if (existingUser.length > 0) {
+    if (user) {
       return { error: "User with this email already exists." };
     }
 

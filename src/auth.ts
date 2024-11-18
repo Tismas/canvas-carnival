@@ -21,6 +21,31 @@ export const { auth, handlers } = NextAuth({
     GitHub({
       clientId: getEnvVariable("GITHUB_CLIENT_ID"),
       clientSecret: getEnvVariable("GITHUB_CLIENT_SECRET"),
+      // @ts-expect-error something is wrong with the types on auth side
+      profile: async (profile) => {
+        if (!profile.email || !profile.name) return null;
+
+        const [user] = await db
+          .select({ email: users.email })
+          .from(users)
+          .where(eq(users.email, profile.email))
+          .limit(1);
+        if (user) {
+          db.update(users).set({
+            avatar: profile.avatar_url,
+            emailVerified: new Date(),
+          });
+        } else {
+          await db.insert(users).values({
+            name: profile.name,
+            email: profile.email,
+            emailVerified: new Date(),
+            avatar: profile.avatar_url,
+          });
+        }
+
+        return profile;
+      },
     }),
     Credentials({
       credentials: {
