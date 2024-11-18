@@ -12,6 +12,8 @@
     "@auth/drizzle-adapter": "^1.7.4",
     "@neondatabase/serverless": "^0.10.3",
     "@tabler/icons-react": "^3.22.0",
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "date-fns": "^4.1.0",
     "drizzle-kit": "^0.28.1",
     "drizzle-orm": "^0.36.3",

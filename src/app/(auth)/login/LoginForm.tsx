@@ -2,25 +2,23 @@
 
 import { InputFormField } from "@/components/InputFormField";
 import { signIn } from "next-auth/react";
-import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { useState } from "react";
-
-export const LoginFormSchema = Yup.object({
-  username: Yup.string().required("Username is required!"),
-  password: Yup.string().required("Password is required!"),
-});
+import { ErrorAlert } from "@/components/ErrorAlert";
+import { LoginFormSchema } from "./schema";
 
 export const LoginForm = () => {
   const [error, setError] = useState("");
 
   return (
     <Formik
-      initialValues={{ username: "", password: "" }}
+      initialValues={{ email: "", password: "" }}
       validationSchema={LoginFormSchema}
-      onSubmit={async ({ username, password }, form) => {
+      onSubmit={async ({ email, password }, form) => {
+        form.setSubmitting(true);
+
         const signInResult = await signIn("credentials", {
-          username,
+          email,
           password,
           redirect: false,
         });
@@ -34,17 +32,13 @@ export const LoginForm = () => {
     >
       {({ isSubmitting }) => (
         <Form className="space-y-6">
-          {error && (
-            <div className="w-full p-4 bg-red-100 text-red-700 rounded-lg">
-              {error}
-            </div>
-          )}
+          {error && <ErrorAlert>{error}</ErrorAlert>}
           <InputFormField
-            name="username"
-            label="Username"
-            autoComplete="username"
+            name="email"
+            label="Email"
+            autoComplete="email"
             type="text"
-            placeholder="johny"
+            placeholder="johny@example.com"
           />
           <InputFormField
             name="password"

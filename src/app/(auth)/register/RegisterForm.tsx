@@ -2,30 +2,40 @@
 
 import { InputFormField } from "@/components/InputFormField";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
-
-export const RegisterFormSchema = Yup.object({
-  username: Yup.string().min(3).max(50).required(),
-  password: Yup.string().min(10).max(256).required(),
-  email: Yup.string().email().required(),
-});
+import { createAccount } from "./actions";
+import { useState } from "react";
+import { ErrorAlert } from "@/components/ErrorAlert";
+import { RegisterFormSchema } from "./schema";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
   return (
     <Formik
-      initialValues={{ username: "", email: "", password: "" }}
+      initialValues={{ name: "", email: "", password: "" }}
       validationSchema={RegisterFormSchema}
-      onSubmit={async (values, helpers) => {
-        console.log(values);
-        helpers.setSubmitting(false);
+      onSubmit={async (values, form) => {
+        form.setSubmitting(true);
+
+        const { error } = await createAccount(values);
+        setError(error);
+
+        if (!error) {
+          router.push("/");
+        }
+
+        form.setSubmitting(false);
       }}
     >
       {({ isSubmitting }) => (
         <Form className="space-y-6">
+          {error && <ErrorAlert>{error}</ErrorAlert>}
           <InputFormField
-            name="username"
-            label="Username"
-            autoComplete="username"
+            name="name"
+            label="Name"
+            autoComplete="name"
             type="text"
             placeholder="johny"
           />
