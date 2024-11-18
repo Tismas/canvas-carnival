@@ -1,9 +1,7 @@
-import { auth } from "@/auth";
 import { TileLink } from "@/components/TileLink";
 import { UnlockedTaskData } from "@/data/events";
 import { isTaskDone } from "@/db/helpers";
 import { useUser } from "@/hooks/useUser";
-import { redirect } from "next/navigation";
 
 interface Props {
   taskData: UnlockedTaskData;

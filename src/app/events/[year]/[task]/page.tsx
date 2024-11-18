@@ -1,5 +1,3 @@
-import { auth } from "@/auth";
-import { Button } from "@/components/Button";
 import { Hint } from "@/components/Hint";
 import { getTask, isValidEventYear, isValidTaskNumber } from "@/data/events";
 import { isTaskDone } from "@/db/helpers";
