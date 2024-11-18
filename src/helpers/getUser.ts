@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 export type User = Omit<InferSelectModel<typeof users>, "password">;
 
-export const useUser = async (): Promise<User> => {
+export const getUser = async (): Promise<User> => {
   const session = await auth();
   if (!session?.user?.email) redirect("/login");
 

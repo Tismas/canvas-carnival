@@ -1,6 +1,6 @@
 import { db } from "@/db/db";
 import { tasks } from "@/db/schema";
-import { User } from "@/hooks/useUser";
+import { User } from "@/helpers/getUser";
 import { and, eq } from "drizzle-orm";
 
 export const isTaskDone = async (
