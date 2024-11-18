@@ -6,7 +6,6 @@ import {
   IconHeart,
   IconUser,
 } from "@tabler/icons-react";
-import { auth } from "@/auth";
 import { AuthButton } from "./(auth)/AuthButton";
 
 interface NavLinkProps {
@@ -24,8 +23,6 @@ const NavLink = ({ href, children }: PropsWithChildren<NavLinkProps>) => {
 };
 
 export const Nav = async () => {
-  const session = await auth();
-
   return (
     <div className="m-4 flex items-center">
       <Link className="inline-flex text-primary-500 mr-4" href={"/"}>

@@ -1,31 +1,27 @@
 "use client";
 
 import { InputFormField } from "@/components/InputFormField";
-import { signIn } from "next-auth/react";
 import { Formik, Form } from "formik";
 import { useState } from "react";
 import { ErrorAlert } from "@/components/ErrorAlert";
 import { LoginFormSchema } from "./schema";
+import { logIn } from "./login";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={LoginFormSchema}
-      onSubmit={async ({ email, password }, form) => {
+      onSubmit={async (credentials, form) => {
         form.setSubmitting(true);
 
-        const signInResult = await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        });
-
-        if (signInResult?.error) {
-          setError("Invalid username or password");
-        }
+        const logInError = await logIn(credentials);
+        setError(logInError);
+        if (!logInError) router.push("/");
 
         form.setSubmitting(false);
       }}

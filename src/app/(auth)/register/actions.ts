@@ -3,7 +3,7 @@
 import { RegisterFormSchema, RegisterFormValues } from "./schema";
 import { db } from "@/db/db";
 import { users } from "@/db/schema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 
 interface Result {

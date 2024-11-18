@@ -6,6 +6,7 @@ import { createAccount } from "./actions";
 import { useState } from "react";
 import { ErrorAlert } from "@/components/ErrorAlert";
 import { RegisterFormSchema } from "./schema";
+import { logIn } from "../login/login";
 import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
@@ -23,7 +24,10 @@ export const RegisterForm = () => {
         setError(error);
 
         if (!error) {
-          router.push("/");
+          const logInError = await logIn(values);
+          setError(logInError);
+
+          if (!logInError) router.push("/");
         }
 
         form.setSubmitting(false);
