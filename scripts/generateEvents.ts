@@ -16,7 +16,7 @@ export interface Task {
 type Event = Record<string, Task>;
 type Events = Record<string, Event>;
 
-const startDate = new Date("2024-11-17");
+const startDate = new Date("2025-01-18");
 const tasksDir = path.resolve(process.cwd(), "src", "data", "tasks");
 
 const parseTask = async (year: string, taskNumber: string): Promise<Task> => {

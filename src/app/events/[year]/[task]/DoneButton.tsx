@@ -2,20 +2,31 @@
 
 import { Button } from "@/components/Button";
 import { completeTask } from "./actions";
+import { useTransition } from "react";
+import { UserDto } from "@/db/types";
 
 interface Props {
   isDone: boolean;
-  userEmail: string;
+  user: UserDto;
   year: string;
   taskNumber: string;
 }
 
-export const DoneButton = ({ isDone, taskNumber, userEmail, year }: Props) => {
+export const DoneButton = ({ isDone, taskNumber, user, year }: Props) => {
+  const [isPending, startTransition] = useTransition();
+
+  const handleCompletion = () => {
+    startTransition(async () => {
+      await completeTask(user, year, taskNumber);
+    });
+  };
+
   return (
     <Button
       className={`w-32 mt-16 ${isDone ? "bg-primary-600" : ""}`}
       disabled={isDone}
-      onClick={() => completeTask(userEmail, year, taskNumber)}
+      isLoading={isPending}
+      onClick={handleCompletion}
     >
       I did it!
     </Button>

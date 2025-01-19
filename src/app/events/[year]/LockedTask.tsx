@@ -2,7 +2,7 @@
 
 import { TileLink } from "@/components/TileLink";
 import type { LockedTaskData } from "@/data/events";
-import { getTimeRemaining } from "@/helpers/getTimeRemaining";
+import { getTimeRemaining } from "@/data/helpers/getTimeRemaining";
 import { IconLock } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 

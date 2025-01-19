@@ -1,52 +1,55 @@
 "use server";
 
 import { db } from "@/db/db";
-import { tasks, users } from "@/db/schema";
+import { task, user } from "@/db/schema";
+import { TaskDto, UserDto } from "@/db/types";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export const completeTask = async (
-  userEmail: string,
+  actor: UserDto,
   year: string,
   taskNumber: string
-) => {
-  const [user] = await db
+): Promise<TaskDto | null> => {
+  const [signedInUser] = await db
     .select()
-    .from(users)
-    .where(eq(users.email, userEmail))
+    .from(user)
+    .where(eq(user.email, actor.email))
     .limit(1);
 
-  if (!user) return;
+  if (!signedInUser) return null;
 
-  const [task] = await db
+  const [completedTask] = await db
     .select()
-    .from(tasks)
+    .from(task)
     .where(
       and(
-        eq(tasks.userId, user.id),
-        eq(tasks.event, Number(year)),
-        eq(tasks.taskNumber, Number(taskNumber))
+        eq(task.userId, signedInUser.id),
+        eq(task.event, Number(year)),
+        eq(task.taskNumber, Number(taskNumber))
       )
     );
-  if (!task) {
-    await db.insert(tasks).values({
+  if (!completedTask) {
+    await db.insert(task).values({
       event: Number(year),
       taskNumber: Number(taskNumber),
       completedAt: new Date(),
-      userId: user.id,
+      userId: signedInUser.id,
     });
   } else {
     await db
-      .update(tasks)
+      .update(task)
       .set({ completedAt: new Date() })
       .where(
         and(
-          eq(tasks.userId, user.id),
-          eq(tasks.event, Number(year)),
-          eq(tasks.taskNumber, Number(taskNumber))
+          eq(task.userId, signedInUser.id),
+          eq(task.event, Number(year)),
+          eq(task.taskNumber, Number(taskNumber))
         )
       );
   }
 
   revalidatePath("/events");
+
+  return completedTask;
 };

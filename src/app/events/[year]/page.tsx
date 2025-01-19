@@ -2,6 +2,7 @@ import { UnlockedTask } from "./UnlockedTask";
 import { LockedTask } from "./LockedTask";
 import { getTasks, isValidEventYear } from "@/data/events";
 import { notFound } from "next/navigation";
+import { getSignedInUser } from "@/lib/auth/helpers/getSignedInUser";
 
 interface Props {
   params: Promise<{ year: string }>;
@@ -12,7 +13,8 @@ export default async function Event({ params }: Props) {
 
   if (!isValidEventYear(year)) notFound();
 
-  const tasks = getTasks(year);
+  const user = await getSignedInUser();
+  const tasks = await getTasks(user, year);
 
   return (
     <div className="flex gap-4">

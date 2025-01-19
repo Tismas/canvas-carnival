@@ -1,22 +1,14 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { redirect } from "next/navigation";
+import { ReactNode } from "react";
 
 interface Props {
-  header: JSX.Element;
-  form: JSX.Element;
-  buttons: JSX.Element;
+  header: ReactNode;
+  form: ReactNode;
+  buttons: ReactNode;
 }
 
 export const AuthForm = ({ header, form, buttons }: Props) => {
-  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === "authenticated") redirect("/");
-  }, [status]);
-
   return (
     <div className="flex justify-center mt-16">
       <div className="border-slate-900 border-4 rounded-lg p-8 w-full max-w-md">

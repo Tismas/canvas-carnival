@@ -1,4 +1,4 @@
 import { drizzle } from "drizzle-orm/neon-http";
-import { getEnvVariable } from "../env";
+import { getServerConfigValue } from "../config/serverConfig";
 
-export const db = drizzle(getEnvVariable("DATABASE_URL"));
+export const db = drizzle(getServerConfigValue("DATABASE_URL"));

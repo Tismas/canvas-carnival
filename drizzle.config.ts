@@ -1,11 +1,10 @@
-import { getEnvVariable } from "@/env";
+import { getServerConfigValue } from "@/config/serverConfig";
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  out: "./drizzle",
   schema: "./src/db/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: getEnvVariable("DATABASE_URL"),
+    url: getServerConfigValue("DATABASE_URL"),
   },
 });

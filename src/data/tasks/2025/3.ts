@@ -8,6 +8,6 @@ export const task: TaskData = {
     "You can use Math.atan2 to get the angle between ball and mouse.",
     "You can use that angle to get velocity for x(Math.cos) and y(Math.sin).",
     "You can add that velocity to the ball position to make the ball move towards the mouse. Remember to limit the velocity.",
-    "You can use setInterval to keep drawing and updating canvas eg. 60 times a second - setInterval(aFunction, 1000/ 60)",
+    "You can use setInterval to keep drawing and updating canvas eg. 60 times a second - setInterval(aFunction, 1000/60)",
   ],
 };

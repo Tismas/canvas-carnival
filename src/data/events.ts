@@ -1,5 +1,9 @@
 import { isBefore } from "date-fns";
 import { events } from "./generated/events";
+import { UserDto } from "@/db/types";
+import { db } from "@/db/db";
+import { task } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
 
 type Events = typeof events;
 type EventYear = keyof Events;
@@ -15,14 +19,17 @@ interface ParsedTaskData {
   readonly unlockedAt: string;
 }
 
-export interface UnlockedTaskData {
-  isUnlocked: true;
+interface TaskBase {
   taskNumber: string;
-  task: TaskData;
 }
-export interface LockedTaskData {
+
+export interface UnlockedTaskData extends TaskBase {
+  isUnlocked: true;
+  task: TaskData;
+  isDone: boolean;
+}
+export interface LockedTaskData extends TaskBase {
   isUnlocked: false;
-  taskNumber: string;
   unlockedAt: Date;
 }
 export type Task = UnlockedTaskData | LockedTaskData;
@@ -31,16 +38,38 @@ export const getEvents = () => {
   return Object.keys(events);
 };
 
-export const getTasks = <const T extends EventYear>(year: T) => {
-  return Object.entries(events[year]).map(([taskNumber]) =>
-    getTask(year, taskNumber as TaskNumber<T>)
+export const isTaskDone = async (
+  actor: UserDto,
+  year: string,
+  taskNumber: string
+): Promise<boolean> => {
+  const [userTask] = await db
+    .select()
+    .from(task)
+    .where(
+      and(
+        eq(task.userId, actor.id),
+        eq(task.event, Number(year)),
+        eq(task.taskNumber, Number(taskNumber))
+      )
+    );
+
+  return Boolean(userTask?.completedAt);
+};
+
+export const getTasks = <const T extends EventYear>(user: UserDto, year: T) => {
+  return Promise.all(
+    Object.entries(events[year]).map(([taskNumber]) =>
+      getTask(user, year, taskNumber as TaskNumber<T>)
+    )
   );
 };
 
-export const getTask = <const T extends EventYear>(
+export const getTask = async <const T extends EventYear>(
+  user: UserDto,
   year: T,
   taskNumber: TaskNumber<T>
-): Task => {
+): Promise<Task> => {
   const { task, unlockedAt } = events[year][taskNumber] as ParsedTaskData;
   const isUnlocked = isBefore(unlockedAt, new Date());
 
@@ -49,6 +78,7 @@ export const getTask = <const T extends EventYear>(
       isUnlocked: true,
       taskNumber: taskNumber as string,
       task: task,
+      isDone: await isTaskDone(user, year, taskNumber as string),
     };
   } else {
     return {
