@@ -11,7 +11,7 @@ export const UnlockedTask = async ({ taskData, year }: Props) => {
 
   return (
     <TileLink
-      className={isDone ? "bg-green-800" : ""}
+      className={isDone ? "bg-primary-600" : ""}
       href={`/events/${year}/${taskNumber}`}
     >
       #{taskNumber} {task.title}
